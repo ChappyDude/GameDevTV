@@ -7,7 +7,7 @@ int main(void)
 
     InitWindow(window_width, window_height, "Dasher");
 
-    const int gravity = 1;  // Pixels per framer per frame
+    const int gravity = 1'000;  // Pixels per s per s
 
     Texture2D scarfy = LoadTexture("textures/scarfy.png");
     Rectangle scarfyRec;
@@ -20,13 +20,18 @@ int main(void)
     scarfyPos.y = window_height - scarfyRec.height;
 
     int velocity = 0;
-    int jump_val = -20;
+    int jump_val = -600;    // Pixel per second
 
     bool isInAir;
+
+    int frame;
+    const float updateTime = 1.0 / 12.0;
+    float runningTime;
 
     SetTargetFPS(60);
     while (!WindowShouldClose())
     {
+        const float dT = GetFrameTime();
         BeginDrawing();
         ClearBackground(WHITE);
 
@@ -37,7 +42,7 @@ int main(void)
         }
         else 
         {
-            velocity += gravity;
+            velocity += gravity * dT;
             isInAir = true;
         }
 
@@ -46,7 +51,20 @@ int main(void)
             velocity += jump_val;
         }
 
-        scarfyPos.y += velocity;
+        scarfyPos.y += velocity * dT;
+
+        scarfyRec.x = frame * scarfyRec.width;
+        runningTime += dT;
+
+        if (runningTime >= updateTime)
+        {
+            runningTime = 0.0;
+            frame++;
+            if (frame > 5)
+            {
+                frame = 0;
+            }
+        }
 
         DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
         EndDrawing();
