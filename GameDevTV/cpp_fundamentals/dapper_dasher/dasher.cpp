@@ -19,6 +19,15 @@ int main(void)
     nebularPos.x = window_width;
     nebularPos.y = window_height - nebulaRec.height;
 
+    Rectangle nebula2Rec;
+    nebula2Rec.width = nebula.width / 8;
+    nebula2Rec.height = nebula.height / 8;
+    nebula2Rec.x = 0;
+    nebula2Rec.y = 0;
+    Vector2 nebular2Pos;
+    nebular2Pos.x = window_width + 300;
+    nebular2Pos.y = window_height - nebulaRec.height;
+
 
     Texture2D scarfy = LoadTexture("textures/scarfy.png");
     Rectangle scarfyRec;
@@ -38,6 +47,10 @@ int main(void)
     int nebFrame;
     const float nebUpdateTime = 1.0 / 12.0;
     float nebRunningTime;
+
+    int neb2Frame;
+    const float neb2UpdateTime = 1.0 / 12.0;
+    float neb2RunningTime;
 
     bool isInAir;
 
@@ -69,6 +82,7 @@ int main(void)
         }
 
         nebularPos.x += nebularVelocity * dT;
+        nebular2Pos.x += nebularVelocity * dT;
         scarfyPos.y += velocity * dT;
 
         scarfyRec.x = frame * scarfyRec.width;
@@ -87,18 +101,31 @@ int main(void)
         }
 
         nebRunningTime += dT;
-        nebulaRec.x = frame * nebulaRec.width;
         if (nebRunningTime >= nebUpdateTime)
         {
             nebRunningTime = 0.0;
+            nebulaRec.x = frame * nebulaRec.width;
             nebFrame++;
-            if (frame > 7)
+            if (nebFrame > 7)
             {
-                frame = 0;
+                nebFrame = 0;
+            }
+        }
+
+        neb2RunningTime += dT;
+        if (neb2RunningTime >= neb2UpdateTime)
+        {
+            neb2RunningTime = 0.0;
+            nebula2Rec.x = frame * nebula2Rec.width;
+            neb2Frame++;
+            if (neb2Frame > 7)
+            {
+                neb2Frame = 0;
             }
         }
 
         DrawTextureRec(nebula, nebulaRec, nebularPos, WHITE);
+        DrawTextureRec(nebula, nebula2Rec, nebular2Pos, RED);
         DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
         EndDrawing();
     }
