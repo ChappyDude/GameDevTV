@@ -1,5 +1,14 @@
 #include "raylib.h"
 
+struct AnimeData
+{
+    Rectangle rec;
+    Vector2 pos;
+    int frame;
+    float updateTime;
+    float runningTime;
+};
+
 int main(void)
 {
     const int window_width = 800;
@@ -30,14 +39,16 @@ int main(void)
 
 
     Texture2D scarfy = LoadTexture("textures/scarfy.png");
-    Rectangle scarfyRec;
-    scarfyRec.width = scarfy.width/6;
-    scarfyRec.height = scarfy.height;
-    scarfyRec.x = 0;
-    scarfyRec.y = 0;
-    Vector2 scarfyPos;
-    scarfyPos.x = window_width/2 - scarfyRec.width/2;
-    scarfyPos.y = window_height - scarfyRec.height;
+    AnimeData scarfyData;
+    scarfyData.rec.width = scarfy.width/6;
+    scarfyData.rec.height = scarfy.height;
+    scarfyData.rec.x = 0;
+    scarfyData.rec.y = 0;
+    scarfyData.pos.x = window_width/2 - scarfyData.rec.width/2;
+    scarfyData.pos.y = window_height - scarfyData.rec.height;
+    scarfyData.frame = 0;
+    scarfyData.updateTime = 1.0/12.0;
+    scarfyData.runningTime = 0.0;
 
     int nebularVelocity = -200;
 
@@ -65,7 +76,7 @@ int main(void)
         BeginDrawing();
         ClearBackground(WHITE);
 
-        if (scarfyPos.y >= (window_height - scarfyRec.height))
+        if (scarfyData.pos.y >= (window_height - scarfyData.rec.height))
         {
             velocity = 0;
             isInAir = false;
@@ -83,9 +94,9 @@ int main(void)
 
         nebularPos.x += nebularVelocity * dT;
         nebular2Pos.x += nebularVelocity * dT;
-        scarfyPos.y += velocity * dT;
+        scarfyData.pos.y += velocity * dT;
 
-        scarfyRec.x = frame * scarfyRec.width;
+        scarfyData.rec.x = frame * scarfyData.rec.width;
         if (!isInAir)
         {
             runningTime += dT;
@@ -126,7 +137,7 @@ int main(void)
 
         DrawTextureRec(nebula, nebulaRec, nebularPos, WHITE);
         DrawTextureRec(nebula, nebula2Rec, nebular2Pos, RED);
-        DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
+        DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
         EndDrawing();
     }
     UnloadTexture(scarfy);
