@@ -19,6 +19,22 @@ int main(void)
     const int gravity = 1'200;  // Pixels per s per s
 
     Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
+    AnimeData nebData{
+        {0.0, 0.0, nebula.width/8, nebula.height/8},    // Rectangle rec 
+        {window_width, window_height-nebula.height/8},  // Vector pos
+        0,  // int frame
+        1.0/12.0,   // float updateTime
+        0   // float runningTime
+    };
+
+    AnimeData neb2Data{
+        {0.0, 0.0, nebula.width/8, nebula.height/8},    // Rectangle rec 
+        {window_width + 300, window_height-nebula.height/8},  // Vector pos
+        0,  // int frame
+        1.0/16.0,   // float updateTime
+        0.0   // float runningTime
+    };
+
     Rectangle nebulaRec;
     nebulaRec.width = nebula.width / 8;
     nebulaRec.height = nebula.height / 8;
